@@ -15,7 +15,7 @@
     "jsonwebtoken": "^9.0.1",
     "bcryptjs": "^2.4.3"
   },
-  "devDependencies": {
+    "devDependencies": {
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",గు
     "@types/node": "^20.5.9",
