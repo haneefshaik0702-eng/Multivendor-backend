@@ -1,9 +1,11 @@
 {
   "name": "multivendor-backend",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "scripts": {
-    "start": "node dist/index.js",
+  "main": "index.ts",
+"scripts": {
+  "start": "ts-node index.ts"
+}
+
     "build": "tsc"
   },
   "dependencies": {
