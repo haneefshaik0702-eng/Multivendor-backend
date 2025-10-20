@@ -1,18 +1,22 @@
-import dotenv from 'dotenv';
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db";
+import productRoutes from "./routes/products";
+import orderRoutes from "./routes/orders";
+import authRoutes from "./routes/auth";
+
 dotenv.config();
-import app from './app';
-import { connectDb } from './db';
+connectDB();
 
-const port = process.env.PORT || 3000;
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-async function main() {
-  await connectDb();
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-}
+app.get("/", (_req, res) => res.send("✅ Multivendor API is running..."));
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/auth", authRoutes);
 
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

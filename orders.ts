@@ -1,19 +1,17 @@
-import { Router } from 'express';
-import Order from '../models/Order';
-import { authMiddleware } from '../middlewares/authMiddleware';
+import { Router, Request, Response } from "express";
+import Order from "../models/Order";
 
 const router = Router();
 
-router.post('/', authMiddleware, async (req, res) => {
-  const { items, totalCents, address } = req.body;
-  const customerId = (req as any).userId;
-  const order = await Order.create({ customerId, items, totalCents, address });
-  res.json({ id: order._id, createdAt: order.createdAt });
+router.get("/", async (_req: Request, res: Response) => {
+  const orders = await Order.find().populate("products.productId");
+  res.json(orders);
 });
 
-router.get('/', authMiddleware, async (req, res) => {
-  const orders = await Order.find().limit(100).sort({ createdAt: -1 });
-  res.json(orders);
+router.post("/", async (req: Request, res: Response) => {
+  const order = new Order(req.body);
+  await order.save();
+  res.status(201).json(order);
 });
 
 export default router;
