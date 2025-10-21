@@ -14,7 +14,13 @@
   },
   "scripts": {
     "build": "echo 'No build needed for JS functions'",
-    "start": "firebase emulators:start",
-    "deploy": "firebase deploy --only functions"
+    {
+  "scripts": {
+    "start": "node server.js" 
+  },
+  "dependencies": {
+    "firebase-tools": "^13.0.0", 
+    // other dependencies...
   }
 }
+
