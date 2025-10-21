@@ -11,5 +11,10 @@
     "axios": "^1.4.0",
     "stripe": "^11.0.0",
     "@sendgrid/mail": "^7.7.0"
+  },
+  "scripts": {
+    "build": "echo 'No build needed for JS functions'",
+    "start": "firebase emulators:start",
+    "deploy": "firebase deploy --only functions"
   }
 }
