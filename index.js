@@ -1,53 +1,25 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const cors = require('cors')({origin: true});
-const sgMail = require('@sendgrid/mail');
-const stripe = require('stripe')(process.env.STRIPE_SECRET || functions.config().stripe ? functions.config().stripe.secret : '');
-admin.initializeApp();
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
 
-const db = admin.firestore();
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-// Configure SendGrid key via: firebase functions:config:set sendgrid.key="YOUR_KEY"
-if (functions.config().sendgrid && functions.config().sendgrid.key) {
-  sgMail.setApiKey(functions.config().sendgrid.key);
-}
-
-exports.createOrder = functions.https.onCall(async (data, context) => {
-  // Authentication required
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'Request had no authentication.');
-  }
-  const uid = context.auth.uid;
-  const items = data.items || [];
-  const total = data.total || 0;
-
-  // Basic validation
-  if (!Array.isArray(items) || items.length === 0) {
-    throw new functions.https.HttpsError('invalid-argument', 'Cart is empty.');
-  }
-  // Create order document server-side
-  const orderRef = await db.collection('orders').add({
-    customerId: uid,
-    items,
-    total,
-    status: 'placed',
-    createdAt: admin.firestore.FieldValue.serverTimestamp()
-  });
-
-  // Send email to admin or user if SendGrid configured
-  try {
-    if (sgMail && functions.config().sendgrid && functions.config().sendgrid.key) {
-      const msg = {
-        to: 'orders@example.com', // change to admin email or user email
-        from: 'no-reply@example.com',
-        subject: 'New order received',
-        text: `New order ${orderRef.id} placed. Total: ${total}`,
-      };
-      await sgMail.send(msg);
-    }
-  } catch (e) {
-    console.error('SendGrid send failed', e);
-  }
-
-  return { id: orderRef.id };
+// Example route
+app.get("/", (req, res) => {
+  res.send("✅ Multivendor backend is running successfully on Render!");
 });
+
+// Add other API routes here (orders, products, etc.)
+app.post("/create-order", (req, res) => {
+  const { items, total } = req.body;
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "Cart is empty" });
+  }
+  // In future: save to MongoDB using mongoose
+  res.json({ message: "Order created successfully", total });
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
