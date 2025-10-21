@@ -16,11 +16,10 @@
     "build": "echo 'No build needed for JS functions'",
     {
   "scripts": {
-    "start": "node server.js" 
-  },
-  "dependencies": {
-    "firebase-tools": "^13.0.0", 
-    // other dependencies...
-  }
+  "prestart": "npm install -g firebase-tools",
+  "start": "node server.js"
 }
+
+  },
+  
 
