@@ -1,26 +1,30 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+require("dotenv").config(); // to read MONGO_URI from .env
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Root route
+// Example route
 app.get("/", (req, res) => {
-  res.send("✅ Multivendor backend is running successfully on Render!");
+  res.send("✅ API is running successfully...");
 });
 
-// Example API route
-app.post("/create-order", (req, res) => {
-  const { items, total } = req.body;
-  if (!items || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: "Cart is empty" });
-  }
-  // TODO: save order to MongoDB here later
-  res.json({ message: "Order created successfully", total });
-});
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Start server
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// ✅ Server start (keep this at the end)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
