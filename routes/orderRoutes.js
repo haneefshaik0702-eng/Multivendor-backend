@@ -1,40 +1,19 @@
-// routes/orderRoutes.js
-import express from "express";
-import Order from "../models/Order.js";
-import Product from "../models/Product.js";
-
+const express = require("express");
 const router = express.Router();
 
-// Place order
-router.post("/", async (req, res) => {
-  try {
-    const { customerName, products } = req.body;
-    // compute total
-    let total = 0;
-    for (const item of products) {
-      const p = await Product.findById(item.productId);
-      if (!p) return res.status(400).json({ message: "Invalid product" });
-      total += p.price * (item.quantity || 1);
-    }
-    const order = new Order({ customerName, products, totalAmount: total });
-    await order.save();
-    res.status(201).json(order);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+// Place an order
+router.post("/place", (req, res) => {
+  res.send("Order placed successfully!");
 });
 
-// List orders
-router.get("/", async (req, res) => {
-  const orders = await Order.find().populate({ path: "products.productId", model: "Product" });
-  res.json(orders);
+// Track an order
+router.get("/track/:id", (req, res) => {
+  res.send(`Tracking order ${req.params.id}`);
 });
 
-// Update order (status)
-router.put("/:id", async (req, res) => {
-  const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(order);
+// List all orders
+router.get("/", (req, res) => {
+  res.send("List of all orders");
 });
 
-export default router;
-
+module.exports = router;
