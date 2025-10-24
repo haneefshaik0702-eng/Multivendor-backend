@@ -1,36 +1,32 @@
-
 import express from "express";
-import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
+
+import vendorRoutes from "./routes/vendorRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
-
 const app = express();
-
-// ✅ Middlewares
 app.use(cors());
 app.use(express.json());
 
-// ✅ MongoDB connection (optional)
-const MONGO_URI = process.env.MONGO_URI || "your_local_mongodb_connection_string";
+// MongoDB connection
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ MongoDB connected successfully"))
-  .catch((err) => console.log("❌ MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
-// ✅ Test route to confirm backend is live
-app.get("/", (req, res) => {
-  res.send("🚀 Backend is running successfully!");
-});
+// Routes
+app.use("/api/vendors", vendorRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
-// ✅ Test route for frontend-backend connection
+// Test route
 app.get("/test", (req, res) => {
   res.send("Backend Connected Successfully!");
 });
 
-// ✅ Start server
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
