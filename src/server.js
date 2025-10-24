@@ -17,7 +17,7 @@ app.use("/api/vendors", vendorRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
-// ✅ Test connection
+// ✅ Test connection route
 app.get("/test", (req, res) => {
   res.send("Backend Connected Successfully!");
 });
