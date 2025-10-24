@@ -1,11 +1,11 @@
-// models/Vendor.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const vendorSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true } // later hash this with bcrypt
-}, { timestamps: true });
+  password: { type: String, required: true },
+  shopName: { type: String },
+  createdAt: { type: Date, default: Date.now },
+});
 
-export default mongoose.model("Vendor", vendorSchema);
-
+module.exports = mongoose.model("Vendor", vendorSchema);
