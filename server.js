@@ -1,26 +1,19 @@
 const express = require("express");
-const cors = require("cors");
-
-const vendorRoutes = require("./src/routes/vendorRoutes");
-const productRoutes = require("./src/routes/productRoutes");
-const orderRoutes = require("./src/routes/orderRoutes");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
-// Test route
-app.get("/test", (req, res) => {
-  res.send("Backend Connected Successfully!");
-});
-
-// Main API routes
+// Import routes
+const vendorRoutes = require("./routes/vendorRoutes");
 app.use("/api/vendors", vendorRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes);
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error(err));
+
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
