@@ -2,29 +2,22 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config(); // 👈 VERY IMPORTANT
 
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
+const mongoURI = process.env.MONGO_URI;
+console.log("🔍 Mongo URI from env:", mongoURI); // 👈 for testing
 
-if (!MONGO_URI) {
-  console.error("❌ Missing MONGO_URI in environment variables!");
-}
-
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ MongoDB Connected"))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+mongoose
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ MongoDB connected successfully"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 app.get("/", (req, res) => {
-  res.send("✅ Backend is running successfully on Render!");
+  res.send("✅ Backend server is running successfully on Render!");
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
