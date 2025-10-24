@@ -1,36 +1,31 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const cors = require("cors");
 const dotenv = require("dotenv");
 
+// Load environment variables
 dotenv.config();
+
 const app = express();
 
+// Middleware
 app.use(express.json());
+app.use(cors());
 
-// ✅ Import routes
+// Import routes
 const vendorRoutes = require("./routes/vendorRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
-// ✅ Use routes
+// Use routes
 app.use("/api/vendors", vendorRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
-// ✅ Test connection route
-app.get("/test", (req, res) => {
-  res.send("Backend Connected Successfully!");
+// Default route
+app.get("/", (req, res) => {
+  res.send("✅ Multivendor backend running successfully!");
 });
 
-// ✅ MongoDB connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.error("MongoDB connection error:", err));
-
-// ✅ Start server
+// Start server
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
-
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
