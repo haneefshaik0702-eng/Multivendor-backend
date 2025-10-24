@@ -10,7 +10,10 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-// ✅ Connect to MongoDB
+if (!MONGO_URI) {
+  console.error("❌ Missing MONGO_URI in environment variables!");
+}
+
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -18,9 +21,8 @@ mongoose.connect(MONGO_URI, {
 .then(() => console.log("✅ MongoDB Connected"))
 .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// ✅ Test route
 app.get("/", (req, res) => {
-  res.send("✅ Backend server is running successfully on Render!");
+  res.send("✅ Backend is running successfully on Render!");
 });
 
 app.listen(PORT, () => {
