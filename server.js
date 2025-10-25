@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config(); // ✅ Load environment variables
 
 const app = express();
 
@@ -12,7 +15,7 @@ app.use(express.json());
 
 // ✅ Connect to MongoDB
 mongoose
-  .connect("your_mongodb_connection_string_here", {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -24,7 +27,7 @@ app.get("/", (req, res) => {
   res.send("Backend running successfully 🚀");
 });
 
-// ✅ Products route example (you can adjust to your real route)
+// ✅ Example route
 app.get("/api/products", (req, res) => {
   res.json([
     { id: 1, name: "Product 1", price: 100 },
