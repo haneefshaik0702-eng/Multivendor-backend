@@ -1,33 +1,37 @@
-// server.js
-const express = require("express");
-const cors = require("cors");
-
-const productRoutes = require("./src/routes/productRoutes");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 
 const app = express();
 
-// ✅ Enable CORS for your Render frontend
-app.use(
-  cors({
-    origin: "https://multivendor-fronted.onrender.com", // your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+// ✅ Enable CORS
+app.use(cors());
 
-// ✅ Parse JSON request bodies
+// ✅ Middleware
 app.use(express.json());
 
-// ✅ Home route
+// ✅ Connect to MongoDB
+mongoose
+  .connect("your_mongodb_connection_string_here", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection failed:", err));
+
+// ✅ Simple test route
 app.get("/", (req, res) => {
-  res.send("✅ Backend server is running successfully on Render!");
+  res.send("Backend running successfully 🚀");
 });
 
-// ✅ Product routes
-app.use("/api/products", productRoutes);
-
-// ✅ Start server
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+// ✅ Products route example (you can adjust to your real route)
+app.get("/api/products", (req, res) => {
+  res.json([
+    { id: 1, name: "Product 1", price: 100 },
+    { id: 2, name: "Product 2", price: 200 },
+  ]);
 });
+
+// ✅ Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
