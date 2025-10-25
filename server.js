@@ -5,7 +5,17 @@ const cors = require("cors");
 const productRoutes = require("./src/routes/productRoutes");
 
 const app = express();
-app.use(cors());
+
+// ✅ Enable CORS for your Render frontend
+app.use(
+  cors({
+    origin: "https://multivendor-fronted.onrender.com", // your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
+// ✅ Parse JSON request bodies
 app.use(express.json());
 
 // ✅ Home route
@@ -13,7 +23,7 @@ app.get("/", (req, res) => {
   res.send("✅ Backend server is running successfully on Render!");
 });
 
-// ✅ Use product routes
+// ✅ Product routes
 app.use("/api/products", productRoutes);
 
 // ✅ Start server
