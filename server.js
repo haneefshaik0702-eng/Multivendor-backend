@@ -2,6 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 
+const productRoutes = require("./src/routes/productRoutes");
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -11,15 +13,8 @@ app.get("/", (req, res) => {
   res.send("✅ Backend server is running successfully on Render!");
 });
 
-// ✅ Temporary Products API (test data)
-app.get("/api/products", (req, res) => {
-  const products = [
-    { id: 1, name: "Red Shirt", price: 499 },
-    { id: 2, name: "Blue Jeans", price: 999 },
-    { id: 3, name: "Sneakers", price: 1499 },
-  ];
-  res.json(products);
-});
+// ✅ Use product routes
+app.use("/api/products", productRoutes);
 
 // ✅ Start server
 const PORT = process.env.PORT || 10000;
