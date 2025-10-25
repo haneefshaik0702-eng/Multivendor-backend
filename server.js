@@ -3,13 +3,15 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-dotenv.config();
+dotenv.config(); // Load .env variables
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ Connect to MongoDB
+// ✅ MongoDB Connection
 const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
@@ -22,16 +24,20 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("✅ MongoDB connected"))
+  .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);
   });
 
-// Example route
+// Example Route
 app.get("/", (req, res) => {
-  res.send("Server is running successfully 🚀");
+  res.send("🚀 Server is running and MongoDB is connected!");
 });
 
+// ✅ Dynamic Port for Render
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
