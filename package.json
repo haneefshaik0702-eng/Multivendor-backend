@@ -1,16 +1,18 @@
 {
-  "name": "multivendor-backend",
+  "name": "multivendor-fronted",
+  "private": true,
   "version": "1.0.0",
-  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "build": "echo 'no build step'"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "mongoose": "^7.6.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
   }
 }
