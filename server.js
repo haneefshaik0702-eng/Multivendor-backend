@@ -1,41 +1,26 @@
 import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
 import cors from "cors";
 
-dotenv.config(); // Load .env variables
-
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Enable CORS
+app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE"] }));
 app.use(express.json());
 
-// ✅ MongoDB Connection
-const mongoURI = process.env.MONGO_URI;
-
-if (!mongoURI) {
-  console.error("❌ MONGO_URI is missing in environment variables!");
-  process.exit(1);
-}
-
-mongoose
-  .connect(mongoURI, {
-  })
-  .then(() => console.log("✅ MongoDB connected successfully"))
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1);
-  });
-
-// Example Route
+// Test route
 app.get("/", (req, res) => {
-  res.send("🚀 Server is running and MongoDB is connected!");
+  res.send("Backend is running fine ✅");
 });
 
-// ✅ Dynamic Port for Render
-const PORT = process.env.PORT || 10000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+// Products API
+app.get("/products", (req, res) => {
+  const products = [
+    { id: 1, name: "Test Product 1", price: 100 },
+    { id: 2, name: "Test Product 2", price: 200 }
+  ];
+  res.json(products);
 });
+
+// Start server
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
